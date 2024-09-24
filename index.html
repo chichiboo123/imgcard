@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Cards for Imagination - 상상을 도와주는 카드</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Do+Hyeon&display=swap" rel="stylesheet">
+    <style> 
+        * {font-family: 'Black Han Sans', sans-serif;
+font-family: 'Do Hyeon', sans-serif;}
+      body { 
+        font-family: Arial, sans-serif;
+        background-color: #ffffff;
+      } 
+      .card-container { 
+        display: flex; 
+        justify-content: center; 
+        margin-top: 50px; 
+        flex-wrap: wrap;
+      } 
+      .card { 
+        width: 200px; 
+        height: 200px; 
+        background-color: #ADD8E6; 
+        margin: 10px; 
+        cursor: pointer; 
+        border-radius: 10px;
+      } 
+      .card img { 
+        display: none; 
+        width: 100%; 
+        height: 100%; 
+      } 
+      .reset-btn { 
+        display: none; 
+        margin: 30px auto; 
+        padding: 10px 20px; 
+        background-color: #4CAF50; 
+        color: #fff; 
+        text-align: center; 
+        cursor: pointer; 
+        text-decoration: none; 
+        border: none; 
+        border-radius: 4px;
+        margin-bottom: 10px
+      } 
+      .hidden {
+        display: none;
+      }
+      .info-box {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100px;
+        background-color: #F5F3B9;
+        border-radius: 5px;
+        margin-top: 50px;
+        margin-bottom: 100px
+      }
+      .info-box p {
+        font-size: 15px;
+        line-height: 1.7;
+        text-align: center;
+      }
+      h1, h2 {
+        text-align: center;
+      }
+      form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 50px;
+        margin-bottom: 50px;
+      }
+      input {
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+        font-size: 16px;
+        width: 100%;
+        max-width: 300px;
+      }
+      .create-btn {
+        margin-top: 20px;
+        padding: 10px 20px;
+        background-color: #4CAF50; 
+        color: #fff; 
+        text-align: center; 
+        cursor: pointer; 
+        text-decoration: none; 
+        border: none; 
+        border-radius: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Cards for Imagination</h1>
+    <h2>상상을 도와주는 카드</h2>
+
+    <form id="inputForm">
+      <label for="cardCount">카드 개수:</label>
+      <input type="number" id="cardCount" name="cardCount" placeholder="1~30 사이의 숫자를 입력하세요." min="1" max="30" required>
+      <button type="submit" class="create-btn">카드 만들기</button>
+    </form>
+
+    <div class="card-container hidden" id="cardContainer"></div>
+
+<div style="text-align: center;">
+  <button style="margin-top: 40px;" onclick="location.href='https://chichiboo123.github.io/imgcard/'">처음 화면으로</button>
+</div>
+    
+    <div class="info-box hidden">
+      
+      <p>
+        <strong>&lt;사용방법&gt;</strong><br>
+        - 필요한 카드 개수를 적어 카드를 만듭니다.<br>
+        - 색깔카드를 클릭하여 이미지를 확인하세요.<br>
+        - 카드 만들기 버튼을 누르면 초기화됩니다.
+      </p>
+    </div>
+
+    <script>
+      const cardContainer = document.getElementById('cardContainer');
+      const resetBtn = document.getElementById('resetBtn');
+      const inputForm = document.getElementById('inputForm');
+
+      function randomColor() {
+        const colors = ['#ADD8E6', '#FFFFE0', '#90EE90', '#AFEEEE', '#D2B48C', '#E3E3E3', '#F08080', '#FFA500', '#FFFF00', '#00FA9A', '#87CEFA', '#8332AC'];
+        const randomIndex = Math.floor(Math.random() * colors.length);
+        return colors[randomIndex];
+      }
+
+      function createCards(count) {
+        for (let i = 1; i <= count; i++) {
+          const card = document.createElement('div');
+          card.className = 'card';
+          card.style.backgroundColor = randomColor();
+          cardContainer.appendChild(card);
+
+          const img = document.createElement('img');
+          img.style.display = 'none';
+          img.src = `https://picsum.photos/200/200/?random&${Date.now()}&${i}`;
+          card.appendChild(img);
+
+          card.addEventListener('click', () => {
+            if (img.style.display === 'none') {
+              img.style.display = 'block';
+            } else {
+              img.style.display = 'none';
+            }
+          });
+        }
+
+        cardContainer.classList.remove('hidden');
+        resetBtn.classList.remove('hidden');
+        const infoBox = document.querySelector('.info-box');
+        infoBox.classList.remove('hidden');
+      }
+
+      function resetCards() { 
+        const cards = document.querySelectorAll('.card');
+        cards.forEach(card => {
+          const img = card.querySelector('img'); 
+          img.style.display = 'none'; 
+        }); 
+      }
+
+      inputForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const cardCount = Number(event.target.elements.cardCount.value);
+        cardContainer.innerHTML = '';
+        createCards(cardCount);
+      });
+
+      resetBtn.addEventListener('click', () => { 
+        resetCards(); 
+      }); 
+    </script>
+
+    <footer style="text-align: center; margin-top: 20px;">
+      <p>Photo source: <a href="https://picsum.photos/">https://picsum.photos/</a></p>
+      <p>Created by: 교육뮤지컬 꿈꾸는 치수쌤</p>
+    </footer>
+  </body>
+</html>
